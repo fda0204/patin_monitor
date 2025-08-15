@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block title %}Informasi Alat{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">SMART P!CO</h2>
+
+<div class="card mb-4">
+    <div class="card-header">Galeri Foto</div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card">
+                    <img src="{{ url_for('static', filename='images/hardware3.jpg') }}" class="card-img-top" alt="Tampilan depan alat Smart PICO">
+                    <div class="card-body">
+                        <p class="card-text">Tampilan alat dari atas.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <img src="{{ url_for('static', filename='images/hardware2.jpg') }}" class="card-img-top" alt="Detail komponen kamera">
+                    <div class="card-body">
+                        <p class="card-text">Tampilan alat dari samping.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <img src="{{ url_for('static', filename='images/hardware1.jpg') }}" class="card-img-top" alt="Alat saat beroperasi">
+                    <div class="card-body">
+                        <p class="card-text">Tempat wadah penampungan bibit ikan patin.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">Informasi & Spesifikasi</div>
+    <div class="card-body">
+        <h5>Tentang Alat</h5>
+        <p>
+            <b>Smart P!CO (Patin Counter)</b> adalah sistem yang terintegrasi dengan website monitoring untuk menghitung bibit ikan patin secara otomatis menggunakan kamera dan kecerdasan buatan. Tujuannya adalah untuk mempercepat proses penghitungan, mengurangi stres pada bibit, dan menyediakan data penjualan digital secara real-time.
+        </p>
+        <hr>
+        <h5>Spesifikasi</h5>
+        <ul>
+            <li><b>OS:</b> Menggunakan komputer mini (Raspberry Pi 5) untuk semua pemrosesan.</li>
+            <li><b>Mata Digital:</b> Dilengkapi dengan kamera 12MP Wide Angle 120° dengan resolusi 1080p50.</li>
+            <li><b>AI:</b> Dilengkapi AI untuk mengenali dan menghitung ikan secara otomatis.</li>
+            <li><b>Daya:</b> Power Adaptor 5V 5A dengan koneksi USB-C.</li>
+            <li><b>Konektivitas:</b> Terhubung ke jaringan melalui Wi-Fi untuk mengirim data ke website.</li>
+            <li><b>Easy to access:</b> Website monitoring yang bisa diakses dari mana saja untuk melihat hasil penjualan.</li>
+            <li><b>Easy to use:</b> Dilengkapi dengan display touch screen serta resolusi full HD.</li>
+            <li><b>Plug and Play:</b> Hubungkan alat ke sumber listrik dan bisa langsung digunakan.</li>
+        </ul>
+    </div>
+</div>
+{% endblock %}

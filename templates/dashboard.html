@@ -1,0 +1,154 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<style>
+    /* Definisi warna custom baru */
+    .bg-custom-pink { background-color: #D9468C !important; }
+    .bg-custom-cyan { background-color: #17A2B8 !important; }
+</style>
+
+<h2 class="mb-4">Record Penjualan Dengan Alat Hitung Bibit Patin</h2>
+
+<div class="row mb-4">
+    <div class="col-md-4">
+        <div class="card text-white bg-custom-pink mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Hari Ini</h5>
+                <p class="card-text">Jumlah: {{ hari_ini.total_jumlah or 0 }} ekor</p>
+                <p class="card-text">Total: Rp {{ hari_ini.total_rupiah or 0 }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-white bg-custom-cyan mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Minggu Ini</h5>
+                <p class="card-text">Jumlah: {{ minggu_ini.total_jumlah or 0 }} ekor</p>
+                <p class="card-text">Total: Rp {{ minggu_ini.total_rupiah or 0 }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-white bg-warning mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Bulan Ini</h5>
+                <p class="card-text">Jumlah: {{ bulan_ini.total_jumlah or 0 }} ekor</p>
+                <p class="card-text">Total: Rp {{ bulan_ini.total_rupiah or 0 }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-xl-6">
+        <div class="card mb-4">
+            <div class="card-header text-white" style="background-color: #D9468C;">Grafik Penjualan Harian</div>
+            <div class="card-body"><canvas id="grafikHarian" width="100%" height="40"></canvas></div>
+        </div>
+    </div>
+    <div class="col-xl-6">
+        <div class="card mb-4">
+            <div class="card-header text-white" style="background-color: #17A2B8;">Grafik Penjualan Mingguan</div>
+            <div class="card-body"><canvas id="grafikMingguan" width="100%" height="40"></canvas></div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header bg-dark text-white">Riwayat Penjualan</div>
+    <div class="card-body">
+        <div class="table-scrollable" style="max-height: 400px; overflow-y: auto;">
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>Tanggal</th>
+                        <th>Jumlah (ekor)</th>
+                        <th>Total Penjualan (Rp)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in histori %}
+                        <tr>
+                            <td>{{ row.tanggal }}</td>
+                            <td>{{ row.jumlah }}</td>
+                            <td>Rp {{ row.total_penjualan }}</td>
+                        </tr>
+                    {% else %}
+                        <tr><td colspan="3" class="text-center">Belum ada data</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <p class="text-muted mt-2">Harga per ekor: Rp {{ harga }}</p>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const labelsHarian = {{ labels_harian | tojson }};
+        const dataHarian = {{ data_harian | tojson }};
+        const labelsMingguan = {{ labels_mingguan | tojson }};
+        const dataMingguan = {{ data_mingguan | tojson }};
+
+        // Grafik Harian dengan warna Pink/Magenta
+        const ctxHarian = document.getElementById('grafikHarian').getContext('2d');
+        new Chart(ctxHarian, {
+            type: 'line',
+            data: {
+                labels: labelsHarian,
+                datasets: [{
+                    label: 'Jumlah Bibit Terjual',
+                    data: dataHarian,
+                    backgroundColor: 'rgba(217, 70, 140, 0.2)',
+                    borderColor: 'rgba(217, 70, 140, 1)',
+                    borderWidth: 2,
+                    tension: 0.3
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: { // <-- BAGIAN BARU
+                    legend: {
+                        display: false // Ini untuk menghapus legend
+                    }
+                },
+                scales: {
+                    x: { title: { display: true, text: 'Tanggal' } },
+                    y: { beginAtZero: true, title: { display: true, text: 'Jumlah (ekor)' } }
+                }
+            }
+        });
+
+        // Grafik Mingguan dengan warna Biru/Cyan
+        const ctxMingguan = document.getElementById('grafikMingguan').getContext('2d');
+        new Chart(ctxMingguan, {
+            type: 'bar',
+            data: {
+                labels: labelsMingguan,
+                datasets: [{
+                    label: 'Jumlah Bibit Terjual',
+                    data: dataMingguan,
+                    backgroundColor: 'rgba(23, 162, 184, 0.2)',
+                    borderColor: 'rgba(23, 162, 184, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: { // <-- BAGIAN BARU
+                    legend: {
+                        display: false // Ini untuk menghapus legend
+                    }
+                },
+                scales: {
+                    x: { title: { display: true, text: '{{ nama_bulan_ini }}' } }, // <-- DIGANTI
+                    y: { beginAtZero: true, title: { display: true, text: 'Jumlah (ekor)' } }
+                }
+            }
+        });
+    });
+</script>
+{% endblock %}
