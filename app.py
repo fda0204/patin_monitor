@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, jsonify
 import sqlite3
 import datetime
 import locale # <-- Import modul locale
+import os
 
 app = Flask(__name__)
 
@@ -109,4 +110,5 @@ def kirim_data():
         return jsonify({'message': 'Terjadi error di server'}), 500
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host='0.0.0.0', port=port)
